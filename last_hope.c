@@ -121,7 +121,12 @@ v2 next_pos(v2 coo, puzzle puz)
 	else
 		coo.x++;
 	if (puz.grid [coo.x] [coo.y] != 0)
-		return next_pos(coo, puz);
+	{
+		if (coo.x == 3 && coo.y == 3)
+			return (coo);
+		else
+			return next_pos(coo, puz);
+	}
 	return (coo);
 }
 
@@ -159,6 +164,11 @@ int can_p_b(v2 coo, int box, puzzle puz)
 int p_b(v2 coo, puzzle puz)
 {
 	ps("trying put box on case");pn(coo.x);pnrl(coo.y);
+	if (coo.x == 3 && coo.y == 3 && puz.grid [3][3] != 0 )
+	{
+		psrl("fini!");
+		return (1);
+	}
 //	p_puz(puz);
 	char *errors [5] = 
 	{
@@ -196,6 +206,12 @@ int p_b(v2 coo, puzzle puz)
 				if (coo.x == 3 && (c_left(coo, puz) < puz.pv_h[coo.y] || c_right(coo, puz) < puz.pv_h[coo.y + 4]))
 				{
 					psrl("one of the side pvs doesn't see enough");
+					puz.grid[coo.x][coo.y] = 0;
+					pos[i] = 0;
+				}
+				else if (coo.y == 3 && (c_up(coo, puz) < puz.pv_v[coo.x] || c_down(coo, puz) < puz.pv_v[coo.x + 4]))
+				{
+					ps("vertical pvs doesn't see enough up and down =");pn(c_up(coo, puz));pnrl(c_down(coo, puz));
 					puz.grid[coo.x][coo.y] = 0;
 					pos[i] = 0;
 				}
