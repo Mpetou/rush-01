@@ -147,13 +147,13 @@ int ft_can_put_box(position	pos, int *box, puzzle puz)
 	
 	psrl("right");
 	i = 3;
-/*	while (i >= 0)
+	while (i >= 0)
 	{
-		test_line [i] = puz.grid [i] [pos.y];
-		i++;
-	}*/
-//	pv = puz.pv_h[pos.y + 4]; 
-//	unsitisfied_pvs += (ft_visibles_boxes(test_line) > pv);
+		test_line [3 - i] = puz.grid [i] [pos.y];
+		i--;
+	}
+	pv = puz.pv_h[pos.y + 4]; 
+	unsitisfied_pvs += (ft_visibles_boxes(test_line) > pv);
 	ps("unsitisfied pvs = ");pnrl(unsitisfied_pvs);
 	if (unsitisfied_pvs > 0)
 	{
@@ -199,7 +199,7 @@ int ft_put_box(puzzle puz, position pos)
 			ps("trying to put ");pn(possible_boxes[i]);
 			if (ft_can_put_box(pos, possible_boxes + i, puz))
 			{
-				psrl(", box has been putted");
+				psrl("box has been putted");
 				if (pos.x == 3 && pos.y == 3)
 					return (1);
 				if (ft_put_box(puz, ft_next_pos(pos)))
