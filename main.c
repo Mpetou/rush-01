@@ -6,43 +6,12 @@
 /*   By: mabidal- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 18:24:33 by mabidal-          #+#    #+#             */
-/*   Updated: 2020/08/16 11:45:35 by mabidal-         ###   ########.fr       */
+/*   Updated: 2020/08/16 18:34:39 by mabidal-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-/*
-#include <unistd.h>
 
-void	ft_putchar(char c)
-{
-	write(1, &c, 1);
-}
-
-void ft_putnum(int n)
-{
-	ft_putchar(n + '0');
-}
-
-void ft_print_gri(int **grid)
-{
-	int x = 0;
-	int y = 0;
-	while (x < 4)
-	{
-		while (y < 4)
-		{
-			grid [x] [y] = 0;
-			ft_putnum(grid [x] [y]);
-			if (y != 3)
-				ft_putchar(' ');
-			y++;
-		}
-	y = 0;
-	ft_putchar('\n');
-	x++;
-	}
-}*/
 #include<stdio.h>
-int ft_solve_grid (int **grid, int *pv_v, int *pv_h);
+int ft_solve_grid ( int *pv_v, int *pv_h);
 int main (int argc, char **argv)
 {
 
@@ -50,15 +19,6 @@ int main (int argc, char **argv)
 	int i;
 	int pv_verticaux [8];
 	int pv_horizontaux [8];
-	int row0 [4];
-	int row2 [4];
-	int row1 [4];
-	int row3 [4];
-	int *grid [4];
-
-	//initialize points of views
-	int x;
-	int y;   
 	i = 0;
 	while (i < 8)
 	{
@@ -70,25 +30,5 @@ int main (int argc, char **argv)
 		pv_horizontaux [i - 8]= argv[1] [i * 2] - '0';
 		i++;
 	}
-
-	//initialize grid
-	x = 0;
-	y = 0;
-	grid [0] = row0;
-	grid [1] = row1;
-	grid [2] = row2;
-	grid [3] = row3;
-	while (x < 4)
-	{
-		while (y < 4)
-		{
-			grid [x] [y] = 0;
-			y++;
-		}
-	y = 0;
-	x++;
-	}
-	//afficher la grille
-	x = 0;
-	y = 0;	ft_solve_grid(grid, pv_verticaux, pv_horizontaux);
+	ft_solve_grid( pv_verticaux, pv_horizontaux);
 }
