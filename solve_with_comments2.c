@@ -64,14 +64,14 @@ struct puzzle
 	int *pv_v;
 };
 
-typedef struct position position;
-struct position
+typedef struct vector vector;
+struct vector
 {
 	int x;
 	int y;
 };
 
-position ft_next_pos(position pos)
+vector ft_next_pos(vector pos)
 {
 	if(pos.x == 3)
 	{
@@ -104,71 +104,31 @@ int ft_visibles_boxes(int *line)
 	return (visible_boxes);
 }
 
-int ft_can_put_box(position	pos, int *box, puzzle puz)
+int ft_can_put_box(vector	pos, int *box, puzzle puz)
 {
-	int test_line [4];
+	vector dir;
 	int i;
-	int pv;
-	int unsitisfied_pvs;
+	int j;
+	int highest_box;
+	int viewd_boxes;
 
-	unsitisfied_pvs = 0;
-	puz.grid[pos.x] [pos.y] = *box;
-	rl();
-	psrl("up");
 	i = 0;
-	while (i < 4)
+	highest_box = 0;
+	viewd_boxes = 0;
+	dir.x = 0;
+	dir.y = 1;
+	j = 0;
+	while (j < 4)
 	{
-		test_line [i] = puz.grid [pos.x] [i];
-		i++;
-	}
-	pv = puz.pv_v[pos.x]; 
-	unsitisfied_pvs += (ft_visibles_boxes(test_line) > pv);
-
-	psrl("down");
-	i = 3;
-	while (i >= 0)
-	{
-		test_line [3 - i] = puz.grid [pos.x] [i];
-		i--;
-	}
-	pv = puz.pv_v[pos.x + 4];
-	unsitisfied_pvs += (ft_visibles_boxes(test_line) > pv) * 2;
-
-	psrl("left");
-	i = 0;
-	while (i < 4)
-	{
-		test_line [i] = puz.grid [i] [pos.y];
-		i++;
-	}
-	pv = puz.pv_h[pos.y]; 
-	unsitisfied_pvs += (ft_visibles_boxes(test_line) > pv);
-	
-	psrl("right");
-	i = 3;
-	while (i >= 0)
-	{
-		test_line [3 - i] = puz.grid [i] [pos.y];
-		i--;
-	}
-	pv = puz.pv_h[pos.y + 4]; 
-	unsitisfied_pvs += (ft_visibles_boxes(test_line) > pv) * 3;
-	ps("unsitisfied pvs = ");pnrl(unsitisfied_pvs);
-	if (unsitisfied_pvs > 0)
-	{
-		psrl("no unsitisfied pvs");
-		puz.grid [pos.x] [pos.y] = 0;
-		*box = 0;
-		return (0);
-	}
-	else
-	{
-		ps("unsitisfed pvs: ");pnrl(unsitisfied_pvs);
-		return(1);
-	}
+		while (1 < 4)
+		{
+			if (highest_boxe < puz.grid[dir.x * i] [dir.y * i])
+			{
+				viewd_boxes++;
+				highest_boxe = 
 }
 
-int ft_put_box(puzzle puz, position pos)
+int ft_put_box(puzzle puz, vector pos)
 {	
 	rl();
 	rl();
@@ -221,8 +181,8 @@ int ft_put_box(puzzle puz, position pos)
 int ft_solve_grid (int **grid, int *pv_v, int *pv_h)
 {
 	psrl("called");
-	struct puzzle puz;
-	struct position starting_pos;
+	puzzle puz;
+	vector starting_pos;
 
 	puz.pv_v = pv_v;
 	puz.pv_h = pv_h;
@@ -234,7 +194,7 @@ int ft_solve_grid (int **grid, int *pv_v, int *pv_h)
 	ps("up points of view are: ");ptr(pv_v, 4);
 	ps("down points of view are: ");ptr(pv_v + 4, 4);
 	ps("left points of view are: ");ptr(pv_h, 4);
-	ps("right points of view are: ");ptr(pv_v + 4, 4);
+	ps("right points of view are: ");ptr(pv_h + 4, 4);
 
 	starting_pos.x = 0;
 	starting_pos.y = 0;
