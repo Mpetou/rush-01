@@ -83,49 +83,57 @@ vector ft_next_pos(vector pos)
 	return (pos);
 }
 
-int ft_visibles_boxes(int *line)
+int ft_how_much_does_a_pv_sees(vector st_p,int **grid)
 {
-	int visible_boxes;
-	int highest_boxe;
-	int index;
-
-	visible_boxes = 0;
-	highest_boxe = 0;
-	index = 0;
-	while (index < 4)
-	{
-		if (line[index] > highest_boxe)
-		{
-			highest_boxe = line[index];
-			visible_boxes++;
-		}
-		index++;
-	}
-	return (visible_boxes);
-}
-
-int ft_can_put_box(vector	pos, int *box, puzzle puz)
-{
-	vector dir;
-	int i;
-	int j;
 	int highest_box;
-	int viewd_boxes;
+	int viewed_boxes;
+	int i;
+	int current_box;
+	vector dir;
 
+	dir.x = (st_p.x == 0) - (st_p.x  == 3);
+	dir.y = (st_p.y == 0) - (st_p.y  == 3);
 	i = 0;
 	highest_box = 0;
-	viewd_boxes = 0;
-	dir.x = 0;
-	dir.y = 1;
-	j = 0;
-	while (j < 4)
+	viewed_boxes = 0;
+	while (i < 4)
 	{
-		while (1 < 4)
+		current_box = grid [st_p.x + dir.x * i]  [st_p.y + dir.y * i];
+		if (current_box > highest_box)
 		{
-			if (highest_boxe < puz.grid[dir.x * i] [dir.y * i])
-			{
-				viewd_boxes++;
-				highest_boxe = 
+			viewed_boxes++;
+			highest_box = current_box;
+		}
+		i++;
+	}
+	return (viewed_boxes);
+}
+
+int ft_can_put_box(vector pos, int box, puzzle puz)
+{
+	vector st_p;
+	puz.grid [pos.x] [pos.y] = box;
+	//up
+	st_p.x = pos.x;
+	st_p.y = 3;
+	if (ft_how_much_does_a_pv_sees(st_p, puz.grid) > puz.pv_v[pos.x])
+		return(1);
+	//down
+	st_p.x = pos.x;
+	st_p.y = 0;
+	if (ft_how_much_does_a_pv_sees(st_p, puz.grid) > puz.pv_v[pos.x + 4])
+		return(2);
+	//right
+	st_p.x = 3;
+	st_p.y = pos.y;
+	if (ft_how_much_does_a_pv_sees(st_p, puz.grid) > puz.pv_h[pos.y + 4])
+		return(3);
+	//left
+	st_p.x = 0;
+	st_p.y = pos.y;
+	if (ft_how_much_does_a_pv_sees(st_p, puz.grid) > puz.pv_h[pos.y])
+		return(4);
+	return (0);
 }
 
 int ft_put_box(puzzle puz, vector pos)
@@ -135,17 +143,20 @@ int ft_put_box(puzzle puz, vector pos)
 	ft_print_grid(puz.grid);
 	ps("trying to put box on case ");pn(pos.x);pnrl(pos.y);
 	//eliminer des options les boxes deja pr2sentes
-	int possible_boxes [5];
+	int possible_boxes [4];
+	char *errors [4] = 
+	{
+		"up",
+		"down",
+		"right",
+		"left",
+	};
 	int i = 0;
-	possible_boxes [0] = 0;
-	possible_boxes [1] = 1;
-	possible_boxes [2] = 2;
-	possible_boxes [3] = 3;
-	possible_boxes [4] = 4;
 	while (i < 4)
 	{
-		possible_boxes[puz.grid [pos.x] [i]] = 0;
-		possible_boxes[puz.grid [i] [pos.y]] = 0;
+		possible_boxes[i] = 0;
+		possible_boxes[puz.grid [pos.x] [i]] = 1;
+		possible_boxes[puz.grid [i] [pos.y]] = 1;
 		i++;
 	}
 	ps("remaining possibilities: ");ptr(possible_boxes, 5);
@@ -153,10 +164,11 @@ int ft_put_box(puzzle puz, vector pos)
 	i = 1;
 	while (i < 5)
 	{
-		if (possible_boxes[i] != 0)
+		if (possible_boxes[i] == 0)
 		{
-			ps("trying to put ");pn(possible_boxes[i]);
-			if (ft_can_put_box(pos, possible_boxes + i, puz))
+			int can_put_result = ft_can_put_box(pos, i, puz);
+			ps("trying to put ");pn(i);
+			if (can_put_result == 0)
 			{
 				psrl("box has been putted");
 				if (pos.x == 3 && pos.y == 3)
@@ -170,7 +182,11 @@ int ft_put_box(puzzle puz, vector pos)
 				}
 			}
 			else
+			{
+				possible_boxes[i] = 1;
+				ps(errors[can_put_result - 1]);
 				psrl("... did not work -_-");
+			}
 		}
 		i++;
 	}

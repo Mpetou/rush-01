@@ -234,7 +234,7 @@ int ft_solve_grid (int **grid, int *pv_v, int *pv_h)
 	ps("up points of view are: ");ptr(pv_v, 4);
 	ps("down points of view are: ");ptr(pv_v + 4, 4);
 	ps("left points of view are: ");ptr(pv_h, 4);
-	ps("right points of view are: ");ptr(pv_v + 4, 4);
+	ps("right points of view are: ");ptr(pv_h + 4, 4);
 
 	starting_pos.x = 0;
 	starting_pos.y = 0;
