@@ -6,10 +6,10 @@
 /*   By: mabidal- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 18:24:33 by mabidal-          #+#    #+#             */
-/*   Updated: 2020/08/15 19:25:33 by mabidal-         ###   ########.fr       */
+/*   Updated: 2020/08/16 11:45:35 by mabidal-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+/*
 #include <unistd.h>
 
 void	ft_putchar(char c)
@@ -40,10 +40,12 @@ void ft_print_gri(int **grid)
 	ft_putchar('\n');
 	x++;
 	}
-}
-
+}*/
+#include<stdio.h>
+int ft_solve_grid (int **grid, int *pv_v, int *pv_h);
 int main (int argc, char **argv)
 {
+
 	(void) argc;
 	int i;
 	int pv_verticaux [8];
@@ -86,6 +88,7 @@ int main (int argc, char **argv)
 	y = 0;
 	x++;
 	}
-
-	ft_print_gri(grid);
+	//afficher la grille
+	x = 0;
+	y = 0;	ft_solve_grid(grid, pv_verticaux, pv_horizontaux);
 }
